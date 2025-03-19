@@ -64,14 +64,14 @@ router.get("/login", function(req,res) {
 // User login route, submit POST request to server
 router.post("/login", function(req,res)  {
     var username = req.body.user.name;
-    var password = req.body.user.password;
+    var password = req.body.user.password.toString();
     
     // Verifies user credentials
     function VerifiesUser(callback) {
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
             var dbo = db.db("stego");
-            var query = { username: username, password: password };
+            var query = { username: username.toString(), password: password };
             dbo.collection("users").find(query).toArray(function(err, result) {
                 if (err) throw err;
                 db.close();

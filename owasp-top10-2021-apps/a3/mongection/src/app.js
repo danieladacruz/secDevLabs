@@ -55,12 +55,13 @@ server.post("/login", async (request, response) => {
 
 server.post("/register", async (request, response) => {
     try {
-        const name = request.body.name;
-        const email = request.body.email;
-        const password = request.body.password;
+        const name = request.body.name.toString();
+        const email = request.body.email.toString();
+        const password = request.body.password.toString();
 
         const validEmail = emailRegex.test(email);
         if(!validEmail) { response.send('Bad Email'); }
+        else {
 
         else {
             const user = await db.register({name, email, password});

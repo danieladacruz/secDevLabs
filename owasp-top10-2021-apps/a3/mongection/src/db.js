@@ -3,7 +3,7 @@ const User = require('./models/user');
 const register = async (user) => {
 
     try { 
-        const { name, email, password } = user;
+        const { name, email, password } = { name: user.name.toString(), email: user.email.toString(), password: user.password.toString() };
 
         const existUser = await User.findOne({email: email});
 
